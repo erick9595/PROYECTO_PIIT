@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+	 <h:form id="frmLista">
+	 	<p:commandButton value="Nuevo Medicamento"
+	 		action="#{CRUDMedicamento.nuevoMedicamento}" 
+	 		oncomplete="PF('wRegistrar').show()"
+	 		update=":idRegistrar"/>
+	 
+		<p:dataTable value="#{CRUDMedicamento.listaMedicamento}" 
+			var="row" id="idLista"
+			rowKey="#{row.codMedicamento}" selectionMode="single" 
+			rows="10"
+            paginator="true"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                            					{NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			binding="#{CRUDMedicamento.dtFila}">
+			<p:column headerText="Código" style="width:50px">
+				<h:outputLabel value="#{row.codMedicamento}" />			
+			</p:column>
+			<p:column headerText="Nombre">
+				<h:outputLabel value="#{row.nomMedicamento}"/>			
+			</p:column>
+			<p:column headerText="Laboratorio">
+				<h:outputLabel value="#{row.laboratorio.desLaboratorio}"/>			
+			</p:column>
+			<p:column headerText="Tipo Medicamento">
+				<h:outputLabel value="#{row.tipoMedicamento.nomTipoMedicamento}"/>			
+			</p:column>
+			<p:column headerText="Stock" style="width:50px" >
+				<h:outputLabel value="#{row.stockMedicamento}"/>			
+			</p:column>
+			<p:column headerText="Precio" style="width:100px">
+				<h:outputLabel value="#{row.precioMedicamento}">	
+				<f:convertNumber currencySymbol="S/." locale="en_US" minFractionDigits="2"
+				type="currency"/>
+				</h:outputLabel>		
+			</p:column>
+			<p:column headerText="Fecha" style="width:200px">
+				<h:outputLabel value="#{row.fechaVencimiento}">
+				<f:convertDateTime pattern="dd/MM/yyyy" type="date"/>			
+			</h:outputLabel>
+		
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-edit"  
+					action="#{CRUDMedicamento.seleccionar}"
+					oncomplete="PF('wActualizar').show()"
+					update=":idActualizar"/>
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-remove" 
+					action="#{CRUDMedicamento.seleccionar}"
+					onclick="PF('cd').show()"/>
+			</p:column>
+			
+		   </p:dataTable>
+		   <p:confirmDialog message="Seguro de eliminar?" 
+		   		widgetVar="cd">
+		   			<p:commandButton value="Si" 
+		   				action="#{CRUDMedicamento.eliminarMedicamento}"
+		   				oncomplete="PF('cd').hide()"
+		   				update="idLista"/>
+		   			<p:commandButton value="No" 
+		   				onclick="PF('cd').hide()"/>
+		   </p:confirmDialog>
+		</h:form>
+		<!-- dialogo para registrar medicamento -->
+		<p:dialog header="Registrar Medicamento" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Medicamento">
+				 		<p:panelGrid columns="2">
+				 		<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDMedicamento.medicamento.nomMedicamento}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 		
+				 		<h:outputLabel value="Laboratorio:" />
+				 		<p:selectOneMenu value="#{CRUDMedicamento.medicamento.laboratorio.codLaboratorio}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDMedicamento.listaLaboratorio}" var="fila"
+				 			itemLabel="#{fila.desLaboratorio}"
+				 			itemValue="#{fila.codLaboratorio}"/>
+				 			<p:ajax  listener="#{CRUDMedicamento.cargarTipoMedicamento}" 
+				 						update="idTipo"/>
+				 			
+				 		</p:selectOneMenu>
+				 		<h:outputLabel value="Tipo Medicamento:" />
+				 		<p:selectOneMenu 
+				 			value="#{CRUDMedicamento.medicamento.tipoMedicamento.codTipoMedicamento}" id="idTipo">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDMedicamento.listaTipoMedicamento}" var="fila"
+				 			itemLabel="#{fila.nomTipoMedicamento}"
+				 			itemValue="#{fila.codTipoMedicamento}"/>
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Precio:" />
+				 		<p:inputText value="#{CRUDMedicamento.medicamento.precioMedicamento}"/>
+				 		<h:outputLabel value="Stock:" />
+				 		<p:inputText value="#{CRUDMedicamento.medicamento.stockMedicamento}"/>
+				 		<h:outputLabel value="Fecha:" />
+				 		<p:calendar  showOn="button" pattern="yyyy-MM-dd" locale="es"
+				 		 value="#{CRUDMedicamento.medicamento.fechaVencimiento}"/>
+				 		<h:outputLabel value="Foto:" />
+				 		<p:fileUpload   label="Seleccionar"  
+				 								 cancelLabel="Cancelar"
+				 								 uploadLabel="Subir"
+				 				fileUploadListener="#{CRUDMedicamento.subirFoto}"
+				 								 />
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDMedicamento.registrarMedicamento}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		<!-- dialogo para actualizar medicamento -->
+		<p:dialog header="Actualizar Medicamento" modal="true" 
+				widgetVar="wActualizar" id="idActualizar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Actualizar Medicamento">
+				 		<p:panelGrid columns="2">
+				 		<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDMedicamento.medicamento.nomMedicamento}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 		
+						<h:outputLabel value="Laboratorio:" />
+				 		<p:selectOneMenu value="#{CRUDMedicamento.medicamento.laboratorio.codLaboratorio}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDMedicamento.listaLaboratorio}" var="fila"
+				 			itemLabel="#{fila.desLaboratorio}"
+				 			itemValue="#{fila.codLaboratorio}"/>
+				 			<p:ajax  listener="#{CRUDMedicamento.cargarTipoMedicamento}" 
+				 						update="idTipo"/>
+				 			
+				 		</p:selectOneMenu>
+				 		<h:outputLabel value="Tipo Medicamento:" />
+				 		<p:selectOneMenu 
+				 			value="#{CRUDMedicamento.medicamento.tipoMedicamento.codTipoMedicamento}" id="idTipo">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDMedicamento.listaTipoMedicamento}" var="fila"
+				 			itemLabel="#{fila.nomTipoMedicamento}"
+				 			itemValue="#{fila.codTipoMedicamento}"/>
+				 		</p:selectOneMenu>
+
+				 		
+				 		<h:outputLabel value="Precio:" />
+				 		<p:inputText value="#{CRUDMedicamento.medicamento.precioMedicamento}"/>
+				 		<h:outputLabel value="Stock:" />
+				 		<p:inputText value="#{CRUDMedicamento.medicamento.stockMedicamento}"/>
+				 		<h:outputLabel value="Fecha:" />
+				 		<p:calendar  showOn="button" pattern="yyyy-MM-dd" locale="es"
+				 		 value="#{CRUDMedicamento.medicamento.fechaVencimiento}"/>
+				 		<h:outputLabel value="Foto:" />
+				 		<p:fileUpload   label="Seleccionar"  
+				 								 cancelLabel="Cancelar"
+				 								 uploadLabel="Subir"
+				 				fileUploadListener="#{CRUDMedicamento.subirFoto}"/>
+				 		<p:graphicImage 
+				 		value="/#{CRUDMedicamento.medicamento.imagen}"
+				 		cache="false"/>	
+				 		
+				 		
+				 		
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Actualizar"  
+				 		 		action="#{CRUDMedicamento.actualizarMedicamento}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wActualizar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
+
+
+

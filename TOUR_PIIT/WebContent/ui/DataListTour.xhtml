@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+<style type="text/css">
+    .value {
+        font-weight: bold;
+    }
+</style>
+ 
+ 
+ 
+ 
+ 
+<h:form id="form">
+
+
+             <h:outputLabel value="Destino  :" />
+	                        <p:selectOneMenu value="#{CRUDTour.tour.destino.codDestino}">
+                              <f:selectItem itemLabel="[Seleccione]" itemValue="" />
+	                          <f:selectItems value="#{CRUDTour.listaDepartamento}" var="fila"
+		                             itemLabel="#{fila.nomDepartamento}"
+		                             itemValue="#{fila.codDepartamento}"/>
+                            </p:selectOneMenu>
+		     <p:commandButton value="Consulta" action="#{CRUDTour.consultaXDestino}"
+		     update="form:idLista" /><br></br><br></br>
+           
+           
+           <h:graphicImage name="main/images/listaToour.jpg" />
+       
+       
+        <p:dataGrid var="row" value="#{CRUDTour.listaTour}" columns="3" layout="grid"
+        rows="4" paginator="true" id="idLista"
+        paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+        rowsPerPageTemplate="6,12">
+         
+ 
+  
+ 
+        <p:panel header="#{row.nomTour}" style="text-align:center">
+       
+            <h:panelGrid columns="1" style="width:100%">
+            
+           
+           <p:panelGrid  columns="2" columnClasses="label,value">
+           
+           <h:outputText value="Estado :" />
+            <p:graphicImage name="main/images/disponible.gif" />   
+           
+                 <h:outputText value="Destino :" />
+                 <h:outputText value="#{row.destino.departamentoDestino.nomDepartamento}" />   
+                 
+                 <h:outputText value="Bus :" />
+                 <h:outputText value="#{row.destino.nomBus}" />     
+                         
+                 <h:outputText value="Estadia :" />
+                 <h:outputText value="#{row.destino.nomHotel}" />    
+                
+                 <h:outputText value="Precio :" />
+                 <h:outputText value="#{row.precioTour}" />
+                
+                 <h:outputText value="Personas :" />
+                 <h:outputText value="#{row.stockTour}" />
+                
+                 <h:outputText value="Fecha de salida :" />
+                 <h:outputText value="#{row.fechaViaje}" />
+                 
+
+        
+      
+          </p:panelGrid>
+
+                
+                
+                
+            </h:panelGrid>
+        </p:panel>
+ 
+    </p:dataGrid>
+</h:form>
+		
+		
+		
+
+	</ui:define>
+</ui:composition>
+</html>
+
+
+

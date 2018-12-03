@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+	 <h:form id="frmLista">
+	 	<p:commandButton value="Nuevo Usuario"
+	 		action="#{CRUDUsuario.nuevoUsuario}" 
+	 		oncomplete="PF('wRegistrar').show()"
+	 		update=":idRegistrar"/>
+	 
+		<p:dataTable value="#{CRUDUsuario.listaUsuario}" 
+			var="row" id="idLista"
+			rowKey="#{row.codiUsuario}" selectionMode="single" 
+			rows="10"
+            paginator="true"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                            					{NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			binding="#{CRUDUsuario.dtFila}">
+			
+			<p:column headerText="Código" style="width:50px">
+				<h:outputLabel value="#{row.codiUsuario}" />			
+			</p:column>
+			
+			
+			<p:column headerText="USUARIO">
+				<h:outputLabel value="#{row.logUsuario}"/>			
+			</p:column>
+			
+			<p:column headerText="PASSWORD">
+				<h:outputLabel value="#{row.passUsuario}"/>			
+			</p:column>
+			
+			
+			
+			<p:column headerText="STATUS">
+				<h:outputLabel value="#{row.rolUsuario.nomRol}"/>			
+			</p:column>
+			
+			
+			
+			
+			
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-edit"  
+					action="#{CRUDUsuario.seleccionar}"
+					oncomplete="PF('wActualizar').show()"
+					update=":idActualizar"/>
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-remove" 
+					action="#{CRUDUsuario.seleccionar}"
+					onclick="PF('cd').show()"/>
+			</p:column>
+			
+		   </p:dataTable>
+		   <p:confirmDialog message="Seguro de eliminar?" 
+		   		widgetVar="cd">
+		   			<p:commandButton value="Si" 
+		   				action="#{CRUDUsuario.eliminarUsuario}"
+		   				oncomplete="PF('cd').hide()"
+		   				update="idLista"/>
+		   			<p:commandButton value="No" 
+		   				onclick="PF('cd').hide()"/>
+		   </p:confirmDialog>
+		</h:form>
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para registrar medicamento -->
+		<p:dialog header="Registrar Usuario" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Usuario">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Usuario :" />
+				 		<p:inputText 
+				 			value="#{CRUDUsuario.usuario.logUsuario}"
+				 			required="true" requiredMessage="Usuario obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Password :" />
+				 		<p:inputText 
+				 			value="#{CRUDUsuario.usuario.passUsuario}"
+				 			required="true" requiredMessage="Contraseña obligatoria"/>
+				 			
+				 		
+				 		<h:outputLabel value="Status:" />
+				 		<p:selectOneMenu value="#{CRUDUsuario.usuario.rolUsuario.codRol}">				 			
+				 			<f:selectItems value="#{CRUDUsuario.listaRoles}" var="fila"
+				 			itemLabel="#{fila.nomRol}"
+				 			itemValue="#{fila.codRol}"/>				 				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 	
+				 		
+				 		
+				 		
+				 		
+				 		
+				 
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDUsuario.registrarUsuario}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para actualizar medicamento -->
+		<p:dialog header="Actualizar Usuario" modal="true" 
+				widgetVar="wActualizar" id="idActualizar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Actualizar Usuario">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Usuario :" />
+				 		<p:inputText 
+				 			value="#{CRUDUsuario.usuario.logUsuario}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Password :" />
+				 		<p:inputText 
+				 			value="#{CRUDUsuario.usuario.passUsuario}"
+				 			required="true" requiredMessage="Apellido obligatorio"/>
+				 			
+				 		
+				 		
+				 		<h:outputLabel value="Designado Como:" />
+				 		<p:selectOneMenu value="#{CRUDUsuario.usuario.rolUsuario.codRol}">	
+				 		    <f:selectItem itemLabel="[Seleccione]" itemValue=" " />			 			
+				 			<f:selectItems value="#{CRUDUsuario.listaRoles}" var="fila"
+				 			itemLabel="#{fila.nomRol}"
+				 			itemValue="#{fila.codRol}"/>				 				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 				 		
+				 		
+				 		
+				 		
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Actualizar"  
+				 		 		action="#{CRUDUsuario.actualizarUsuario}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wActualizar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
+
+
+

@@ -1,0 +1,199 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+	 <h:form id="frmLista">
+	 	<p:commandButton value="Nuevo Destino"
+	 		action="#{CRUDDeDestino.nuevoDestino}" 
+	 		oncomplete="PF('wRegistrar').show()"
+	 		update=":idRegistrar"/>
+	 		
+	 	 	
+	 
+		<p:dataTable value="#{CRUDDestino.listaDestino}" 
+			var="row" id="idLista"
+			rowKey="#{row.codDestino}" selectionMode="single" 
+			rows="11"
+            paginator="true"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                            					{NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			binding="#{CRUDDestino.dtFila}">
+			
+			
+			<p:column headerText="ID" style="width:20px">
+				<h:outputLabel value="#{row.codDestino}" />			
+			</p:column>
+			
+			
+				<p:column headerText="Departamento" style="width:150px">
+				<h:outputLabel value="#{row.departamentoDestino.nomDepartamento}" />			
+			</p:column>
+			
+			
+			
+				<p:column headerText="Bus" style="width:220px">
+				<h:outputLabel value="#{row.nomBus}" />			
+			</p:column>
+	
+			
+		
+			
+					<p:column headerText="Hotel" style="width:220px">
+				<h:outputLabel value="#{row.nomHotel}" />			
+			</p:column>
+			
+			
+	
+	
+			
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-edit"  
+					action="#{CRUDDestino.seleccionar}"
+					oncomplete="PF('wActualizar').show()"
+					update=":idActualizar"/>
+			</p:column>
+			
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-remove" 
+					action="#{CRUDDestino.seleccionar}"
+					onclick="PF('cd').show()"/>
+			</p:column>
+			
+		   </p:dataTable>
+		   <p:confirmDialog message="Seguro de eliminar?" 
+		   		widgetVar="cd">
+		   			<p:commandButton value="Si" 
+		   				action="#{CRUDDestino.eliminarDestino}"
+		   				oncomplete="PF('cd').hide()"
+		   				update="idLista"/>
+		   			<p:commandButton value="No" 
+		   				onclick="PF('cd').hide()"/>
+		   </p:confirmDialog>
+		</h:form>
+		
+		
+		
+		
+		
+		<!-- dialogo para registrar medicamento -->
+		<p:dialog header="Registrar Destino" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Destino">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Departamento Destino: " />
+				 		<p:selectOneMenu value="#{CRUDDestino.destino.departamentoDestino.codDepartamento}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDDestino.listaDepartamento}" var="fila"
+				 			itemLabel="#{fila.nomDepartamento}"
+				 			itemValue="#{fila.codDepartamento}"/>
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Bus:" />
+				 		<p:inputText 
+				 			value="#{CRUDDestino.destino.nomBus}"
+				 			required="true" requiredMessage="Bus obligatorio"/>
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Hotel:" />
+				 		<p:inputText 
+				 			value="#{CRUDDestino.destino.nomHotel}"
+				 			required="true" requiredMessage="Hotel obligatorio"/>
+				 		
+				 		
+				 		
+				 				
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDDestino.registrarDestino}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para actualizar medicamento -->
+		<p:dialog header="Actualizar Destino" modal="true" 
+				widgetVar="wActualizar" id="idActualizar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Actualizar Destino">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Departamento Destino: " />
+				 		<p:selectOneMenu value="#{CRUDDestino.destino.departamentoDestino.codDepartamento}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDDestino.listaDepartamento}" var="fila"
+				 			itemLabel="#{fila.nomDepartamento}"
+				 			itemValue="#{fila.codDepartamento}"/>
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Bus:" />
+				 		<p:inputText 
+				 			value="#{CRUDDestino.destino.nomBus}"
+				 			required="true" requiredMessage="Bus obligatorio"/>
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Hotel:" />
+				 		<p:inputText 
+				 			value="#{CRUDDestino.destino.nomHotel}"
+				 			required="true" requiredMessage="Hotel obligatorio"/>
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Actualizar"  
+				 		 		action="#{CRUDDestino.actualizarDestino}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wActualizar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+		
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
+
+
+

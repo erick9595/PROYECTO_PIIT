@@ -1,0 +1,222 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                 template="../templates/uiConMenu.xhtml">
+                
+	<ui:define name="head">
+		<script type="text/javascript">
+		
+
+			$(document).off('click','.btnUpdDetaClassRFTecn').on('click','.btnUpdDetaClassRFTecn',function(){
+				
+				$(this).hide();
+				$('.bntTermAddItemRFTecn').show();
+				
+				$('.fieldClassRFTecn').show();
+				
+				$('.btnRegDTecnClassRFTecn').hide();
+				
+			});
+		
+			$(document).off('click','.bntTermAddItemRFTecn').on('click','.bntTermAddItemRFTecn',function(){
+				
+				$(this).hide();
+				$('.btnUpdDetaClassRFTecn').show();
+				
+				$('.fieldClassRFTecn').hide();
+				
+				$('.btnRegDTecnClassRFTecn').show();
+				
+			});
+			
+			$(document).off('click','.btnRegClieCClie').on('click','.btnRegClieCClie',function(){
+				$('.hdnbtncargadata').trigger('click');
+			})
+			
+			$(document).off('click','.btnRegAutoCAuto').on('click','.btnRegAutoCAuto',function(){
+				$('.hdnbtncargadata').trigger('click');
+			})
+			
+		</script>
+	</ui:define>
+
+	<ui:define name="title">
+        <span class="orange">REGISTRAR COMPRA DE PAQUETE</span>
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl showDetail="true" autoUpdate="true" />
+		
+		
+		
+		<h:form id="idForm">
+			<div class="ui-fluid">
+			<p:fieldset legend="ESCOGE TU PAQUETE : " toggleable="true" toggleSpeed="500">
+			
+				<p:panelGrid columns="2" columnClasses="ui-grid-col-6,ui-grid-col-6" layout="grid" styleClass="ui-panelgrid-blank">
+				
+								
+					
+				</p:panelGrid>
+			</p:fieldset>
+			</div>
+		</h:form> 
+
+		<!-- Detalle -->
+		<h:form id="frmVenta">
+						
+							<p:fieldset legend="Detalle de compra: " style="margin-top:10px;" id="idFieldsetDetalleRFTecn">
+							
+								<p:dataTable id="tblVenta" 
+									value="#{sessionScope.detalle}" 
+									var="aux">
+									
+									
+									
+												
+									<p:column headerText="ID">
+										<p:outputLabel value="#{aux.codMed}"/>
+									</p:column>
+									
+									<p:column headerText="TOUR">
+										<p:outputLabel value="#{aux.nomMed}"/>
+									</p:column>
+									<p:column headerText="PERSONAS">
+										<p:outputLabel value="#{aux.cantidad}"/>
+									</p:column>
+									<p:column headerText="PRECIO">
+										<p:outputLabel value="S/. "/>
+										<p:outputLabel value="#{aux.precio}">
+											<!--<f:convertNumber pattern="#0.00" locale="en_US" /> -->
+										</p:outputLabel>
+									</p:column>
+									<p:column headerText="IMPORTE">
+										<p:outputLabel value="S/. "/>
+										<p:outputLabel value="#{aux.importe}">
+											<!--<f:convertNumber pattern="#0.00" locale="en_US" /> -->
+										</p:outputLabel>
+									</p:column>
+									<p:column>
+										<p:commandButton icon="ui-icon-remove" action="#" 
+											update=":frmVenta:tblVenta"/>
+									</p:column>
+									<p:columnGroup type="footer">
+									
+									
+				
+									
+				            			<p:row>
+							                <p:column colspan="4" style="text-align:right" 
+							                		footerText="Total a pagar " />
+							                <p:column footerText="#{ventas.monto}">
+							                </p:column>
+							                <p:column colspan="1" />   
+							            </p:row>
+									     
+							            
+							            
+							            
+			     					</p:columnGroup>
+									
+								</p:dataTable>
+								
+								<p:panelGrid columns="2" styleClass="ui-g-12 ui-panelgrid-blank" layout="grid">
+								
+									<p:commandButton value="Agregar Paquetes"
+										action="#"
+				        				update=":idBuscarMedicamento" 
+										oncomplete="PF('wlgBuscaMedicamento').show();"
+										/>
+								
+									<p:commandButton value="Registrar Reserva" 
+										action="#{ventas.registraVenta}" update=":frmVenta:tblVenta :idForm"/>
+													
+								</p:panelGrid>
+								
+							</p:fieldset>
+						</h:form>
+
+		
+		
+<!-- Dialogo Buscar Medicamento -->
+			<p:dialog header="ESCOGE Y AGREGAR TU PAQUETE" widgetVar="wlgBuscaMedicamento" modal="true" 
+				resizable="false" closable="true" draggable="false"  id="idBuscarMedicamento"
+				height="600">
+				
+				<h:graphicImage name="main/images/agregar.jpg" />
+				
+				
+				<h:form id="frmConsultaMedicamento">
+				
+				
+				
+					<h:outputText value="Buscar Tour : "/>
+					<h:inputText value="#{ventas.nombre}"/>
+					
+					
+					
+					
+					<p:commandButton 
+						action="#{ventas.consultaTourXNombre}" 
+						oncomplete="" update="frmConsultaMedicamento:tablax"
+									icon="ui-icon-search" title="Buscar"/>
+					
+				
+				
+				
+					<p:dataTable id="tablax" var="aux" 
+						value="#{ventas.listaTour}" 
+						binding="#{ventas.dtFilaTour}"
+						style="width:1000px">
+
+					<f:facet name="header">Lista Tour</f:facet>
+					
+					<p:column headerText="ID">
+						<h:outputText value="#{aux.codTour}"/>
+					</p:column>
+					
+					<p:column headerText="TOUR">
+						<h:outputText value="#{aux.nomTour}"/>
+					</p:column>
+					
+					<p:column headerText="DESTINO">
+						<h:outputText value="#{aux.destino.departamentoDestino.nomDepartamento}"/>
+					</p:column>
+					
+					
+					<p:column headerText="HOSPEDAJE">
+						<h:outputText value="#{aux.destino.nomHotel}"/>
+					</p:column>
+					
+					<p:column headerText="BUS">
+						<h:outputText value="#{aux.destino.nomBus}"/>
+					</p:column>
+					
+					
+					<p:column style="width:50px">
+						<p:commandButton 
+							action="#{ventas.seleccionarTour}" 
+							icon="ui-icon-pencil" title="Seleccionar"/>
+					</p:column>
+				</p:dataTable>	
+				
+				
+				
+				
+				
+				
+				<br></br><br></br><br></br>
+				    <h:outputText value="Cantidad de personas :  "/>
+					<h:inputText value="#{ventas.cantidad}"/>
+					<p:commandButton 
+					action="#{ventas.adicionar}" update=":frmVenta:tblVenta" 
+					icon="ui-icon-cart" title="Adicionar"/>
+				
+				
+
+				 </h:form>	
+				</p:dialog>			
+	</ui:define>
+</ui:composition>

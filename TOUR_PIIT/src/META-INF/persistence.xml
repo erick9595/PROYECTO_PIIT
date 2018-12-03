@@ -1,0 +1,47 @@
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+	version="2.0" xmlns="http://java.sun.com/xml/ns/persistence">
+
+	<persistence-unit name="PE">
+		<!-- Proveedor JPA -->
+		<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+		<!-- Entidades (Clases) -->
+			<class>com.consorcio.entidad.Laboratorio</class>
+			<class>com.consorcio.entidad.Medicamento</class>				
+			<class>com.consorcio.entidad.TipoMedicamento</class>
+			<class>com.consorcio.entidad.Boleta</class>
+			<class>com.consorcio.entidad.Enlace</class>
+			<class>com.consorcio.entidad.Rol</class>
+			<class>com.consorcio.entidad.RolEnlace</class>
+			<class>com.consorcio.entidad.RolEnlacePK</class>
+			<class>com.consorcio.entidad.Usuario</class>
+			<class>com.consorcio.entidad.MedicamentoHasBoleta</class>
+			<class>com.consorcio.entidad.MedicamentoHasBoletaPK</class>	
+			<class>com.consorcio.entidad.Roles</class>
+			<class>com.consorcio.entidad.Usuarios</class>
+			<class>com.consorcio.entidad.Tour</class>
+			<class>com.consorcio.entidad.TourHasBoleta</class>
+			<class>com.consorcio.entidad.TourHasBoletaPk</class>
+			<class>com.consorcio.entidad.Rutas</class>
+			<class>com.consorcio.entidad.Distrito</class>
+			<class>com.consorcio.entidad.Cliente</class>
+			<class>com.consorcio.entidad.Empleado</class>
+			<class>com.consorcio.entidad.Empleados</class>
+			
+			<class>com.consorcio.entidad.Destino</class>
+			<class>com.consorcio.entidad.Departamento</class>
+			
+			
+		<properties>
+			<property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+			<property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/tours" />
+			<property name="javax.persistence.jdbc.user" value="root" />
+			<property name="javax.persistence.jdbc.password" value="" />
+			<!-- Dialecto MySql -->
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<!-- Para ver el log de hibernate -->
+			<property name="hibernate.show_sql" value="true" />
+		</properties>
+	</persistence-unit>
+</persistence>
+

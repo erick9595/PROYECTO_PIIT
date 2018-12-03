@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+	 <h:form id="frmLista">
+	 
+	 
+	 	<p:commandButton value="Nuevo Usuario"
+	 		action="#{CRUDEmpleados.nuevoEmpleado}" 
+	 		oncomplete="PF('wRegistrar').show()"
+	 		update=":idRegistrar"/>
+	 
+		<p:dataTable value="#{CRUDEmpleados.listaEmpleado}" 
+			var="row" id="idLista"
+			rowKey="#{row.codiEmpleado}" selectionMode="single" 
+			rows="10"
+            paginator="true"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                            					{NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			binding="#{CRUDEmpleados.dtFila}">
+			
+			<p:column headerText="Código" style="width:50px">
+				<h:outputLabel value="#{row.codiEmpleado}" />			
+			</p:column>
+			
+			
+			<p:column headerText="Nombre">
+				<h:outputLabel value="#{row.nomEmpleado}"/>			
+			</p:column>
+			
+			<p:column headerText="Apellido">
+				<h:outputLabel value="#{row.apeEmpleado}"/>			
+			</p:column>
+			
+			
+			<p:column headerText="sexo">
+				<h:outputLabel value="#{row.sexoEmpleado}"/>			
+			</p:column>
+			
+	
+			
+			
+			<p:column headerText="Distrito :">
+				<h:outputLabel value="#{row.distritoEmpleado.nomDistrito}"/>			
+			</p:column>
+	
+	
+		
+			<p:column headerText="Usuario :">
+				<h:outputLabel value="#{row.usuarios.logUsuario}"/>			
+			</p:column>
+	
+			
+			
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-edit"  
+					action="#{CRUDEmpleados.seleccionar}"
+					oncomplete="PF('wActualizar').show()"
+					update=":idActualizar"/>
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-remove" 
+					action="#{CRUDEmpleados.seleccionar}"
+					onclick="PF('cd').show()"/>
+			</p:column>
+			
+		   </p:dataTable>
+		   <p:confirmDialog message="Seguro de eliminar?" 
+		   		widgetVar="cd">
+		   			<p:commandButton value="Si" 
+		   				action="#{CRUDEmpleados.eliminarEmpleado}"
+		   				oncomplete="PF('cd').hide()"
+		   				update="idLista"/>
+		   			<p:commandButton value="No" 
+		   				onclick="PF('cd').hide()"/>
+		   </p:confirmDialog>
+		</h:form>
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para registrar medicamento -->
+		<p:dialog header="Registrar Usuario" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Usuario">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDEmpleados.empleado.nomEmpleado}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Apellido:" />
+				 		<p:inputText 
+				 			value="#{CRUDEmpleados.empleado.apeEmpleado}"
+				 			required="true" requiredMessage="Apellido obligatorio"/>
+				 			
+				 		<h:outputLabel value="Sexo: " />
+                      <p:selectOneMenu value="#{CRUDEmpleados.empleado.sexoEmpleado}">
+                      <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+                      <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                      <f:selectItem itemLabel="Femenino" itemValue="Femenino" />	
+			        </p:selectOneMenu>
+				 			
+				 			
+				 	
+		
+				 		
+				 		
+				 		<h:outputLabel value="Distrito:" />
+				 		<p:selectOneMenu value="#{CRUDEmpleados.empleado.distritoEmpleado.codDistrito}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDEmpleados.listaDistrito}" var="fila"
+				 			itemLabel="#{fila.nomDistrito}"
+				 			itemValue="#{fila.codDistrito}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 	
+				 		
+				 		
+				 		<h:outputLabel value="Status:" />
+				 		<p:selectOneMenu value="#{CRUDEmpleados.empleado.usuarios.codiUsuario}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDEmpleados.listaUsuarios}" var="fila"
+				 			itemLabel="#{fila.logUsuario}"
+				 			itemValue="#{fila.codiUsuario}"/>			 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDEmpleados.registrarEmpleado}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para actualizar medicamento -->
+		<p:dialog header="Actualizar Usuario" modal="true" 
+				widgetVar="wActualizar" id="idActualizar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Actualizar Usuario">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDEmpleados.empleado.nomEmpleado}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Apellido:" />
+				 		<p:inputText 
+				 			value="#{CRUDEmpleados.empleado.apeEmpleado}"
+				 			required="true" requiredMessage="Apellido obligatorio"/>
+				 			
+				 	<h:outputLabel value="Sexo: " />
+                      <p:selectOneMenu value="#{CRUDEmpleados.empleado.sexoEmpleado}">
+                      <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+                      <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                      <f:selectItem itemLabel="Femenino" itemValue="Femenino" />	
+			        </p:selectOneMenu>
+				 			
+				 			
+				 			
+				 			
+				 	
+		
+				 		
+				 		
+				 		<h:outputLabel value="Distrito:" />
+				 		<p:selectOneMenu value="#{CRUDEmpleados.empleado.distritoEmpleado.codDistrito}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDEmpleados.listaDistrito}" var="fila"
+				 			itemLabel="#{fila.nomDistrito}"
+				 			itemValue="#{fila.codDistrito}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 	
+				 		
+				 		
+				 		<h:outputLabel value="Status:" />
+				 		<p:selectOneMenu value="#{CRUDEmpleados.empleado.usuarios.codiUsuario}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDEmpleados.listaUsuarios}" var="fila"
+				 			itemLabel="#{fila.logUsuario}"
+				 			itemValue="#{fila.codiUsuario}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Actualizar"  
+				 		 		action="#{CRUDEmpleados.actualizarEmpleado}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wActualizar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
+
+
+

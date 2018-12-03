@@ -1,0 +1,268 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+	 <h:form id="frmLista">
+	 
+	
+	 	<p:commandButton value="Nuevo Cliente"
+	 		action="#{CRUDCliente.nuevoCliente}" 
+	 		oncomplete="PF('wRegistrar').show()"
+	 		update=":idRegistrar"/>
+	 		
+	 		
+	 		 	
+	 
+		<p:dataTable value="#{CRUDCliente.listaCliente}" 
+			var="row" id="idLista"
+			rowKey="#{row.codCliente}" selectionMode="single" 
+			rows="10"
+            paginator="true"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                            					{NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			binding="#{CRUDCliente.dtFila}">
+			
+			<p:column headerText="Código" style="width:50px">
+				<h:outputLabel value="#{row.codCliente}" />			
+			</p:column>
+			
+			
+			<p:column headerText="Nombre">
+				<h:outputLabel value="#{row.nomCliente}"/>			
+			</p:column>
+			
+			<p:column headerText="Apellido">
+				<h:outputLabel value="#{row.apeCliente}"/>			
+			</p:column>
+			
+			
+			
+			
+			<p:column headerText="sexo">
+				<h:outputLabel value="#{row.sexoCliente}"/>			
+			</p:column>
+			
+	
+			
+			<p:column headerText="Fecha" style="width:200px">
+				<h:outputLabel value="#{row.fechaRegistro}">
+				<f:convertDateTime pattern="dd/MM/yyyy" type="date"/>			
+			</h:outputLabel>
+			
+			</p:column>
+			
+			<p:column headerText="Direccion">
+				<h:outputLabel value="#{row.dirCliente}"/>			
+			</p:column>
+			
+			
+			<p:column headerText="Distrito">
+				<h:outputLabel value="#{row.distritoCliente.nomDistrito}"/>			
+			</p:column>
+			
+	
+			
+			
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-edit"  
+					action="#{CRUDCliente.seleccionar}"
+					oncomplete="PF('wActualizar').show()"
+					update=":idActualizar"/>
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-remove" 
+					action="#{CRUDCliente.seleccionar}"
+					onclick="PF('cd').show()"/>
+			</p:column>
+			
+		   </p:dataTable>
+		   <p:confirmDialog message="Seguro de eliminar?" 
+		   		widgetVar="cd">
+		   			<p:commandButton value="Si" 
+		   				action="#{CRUDCliente.eliminarCliente}"
+		   				oncomplete="PF('cd').hide()"
+		   				update="idLista"/>
+		   			<p:commandButton value="No" 
+		   				onclick="PF('cd').hide()"/>
+		   </p:confirmDialog>
+		</h:form>
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para registrar medicamento -->
+		<p:dialog header="Registrar Cliente" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Usuario">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDCliente.cliente.nomCliente}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Apellido:" />
+				 		<p:inputText 
+				 			value="#{CRUDCliente.cliente.apeCliente}"
+				 			required="true" requiredMessage="Apellido obligatorio"/>
+				 			
+				 			
+				 			
+				 
+				 	<h:outputLabel value="Sexo: " />
+                      <p:selectOneMenu value="#{CRUDCliente.cliente.sexoCliente}">
+                      <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+                      <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                      <f:selectItem itemLabel="Femenino" itemValue="Femenino" />	
+			        </p:selectOneMenu>
+			 	 	
+				 	
+				 	
+				 	
+		
+				 		
+				 		
+				 		<h:outputLabel value="Fecha de nacimiento:" />
+				 		<p:calendar  showOn="button" pattern="yyyy-MM-dd" locale="es"
+				 		 value="#{CRUDCliente.cliente.fechaRegistro}"/>
+				 	
+				 	
+				    	<h:outputLabel value="Direccion:" />
+				 		<p:inputText 
+				 			value="#{CRUDCliente.cliente.dirCliente}"
+				 			required="true" requiredMessage="Direccion obligatorio"/>	
+				 		
+				 		
+				 		<h:outputLabel value="Distrito:" />
+				 		<p:selectOneMenu value="#{CRUDCliente.cliente.distritoCliente.codDistrito}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDCliente.listaDistrito}" var="fila"
+				 			itemLabel="#{fila.nomDistrito}"
+				 			itemValue="#{fila.codDistrito}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDCliente.registrarCliente}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para actualizar medicamento -->
+		<p:dialog header="Actualizar Cliente" modal="true" 
+				widgetVar="wActualizar" id="idActualizar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Actualizar Cliente">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDCliente.cliente.nomCliente}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Apellido:" />
+				 		<p:inputText 
+				 			value="#{CRUDCliente.cliente.apeCliente}"
+				 			required="true" requiredMessage="Apellido obligatorio"/>
+				 			
+				 			
+				 			
+				 			<h:outputLabel value="Sexo: " />
+                      <p:selectOneMenu value="#{CRUDCliente.cliente.sexoCliente}">
+                      <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+                      <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                      <f:selectItem itemLabel="Femenino" itemValue="Femenino" />	
+			        </p:selectOneMenu>
+				 			
+				 			
+				 	
+		
+				 		
+				 		
+				 		<h:outputLabel value="Fecha:" />
+				 		<p:calendar  showOn="button" pattern="yyyy-MM-dd" locale="es"
+				 		 value="#{CRUDCliente.cliente.fechaRegistro}"/>
+				 	
+				 	
+				 	
+				 	
+				    	<h:outputLabel value="Direccion:" />
+				 		<p:inputText 
+				 			value="#{CRUDCliente.cliente.dirCliente}"
+				 			required="true" requiredMessage="Direccion obligatorio"/>	
+				 		
+				 		
+				 		<h:outputLabel value="Distrito:" />
+				 		<p:selectOneMenu value="#{CRUDCliente.cliente.distritoCliente.codDistrito}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDCliente.listaDistrito}" var="fila"
+				 			itemLabel="#{fila.nomDistrito}"
+				 			itemValue="#{fila.codDistrito}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+				 		
+				 		
+				 		
+				 
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Actualizar"  
+				 		 		action="#{CRUDCliente.actualizarCliente}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wActualizar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
+
+
+

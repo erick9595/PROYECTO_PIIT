@@ -1,0 +1,222 @@
+<!DOCTYPE html [
+    <!ENTITY nbsp "&#160;">
+    <!ENTITY bull "&#8226;">
+    <!ENTITY copy "&#169;">
+]>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport"
+			content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<link rel="shortcut icon" type="image/png"
+			href="#{request.contextPath}/resources/main/images/favicon.png" />
+	</f:facet>
+
+	<title>REGISTRAR USUARIO</title>
+
+	<h:outputStylesheet name="main/css/showcase.css" />
+	<h:outputStylesheet name="main/css/perfect-scrollbar.css" />
+    <h:outputStylesheet name="main/css/sh.css" />
+	<h:outputScript name="jquery/jquery.js" library="primefaces" />
+	<h:outputScript name="jquery/jquery-plugins.js" library="primefaces" />
+	<h:outputScript name="main/js/perfect-scrollbar.js" />
+	<h:outputScript name="main/js/showcase.js" />
+	<h:outputScript name="main/js/JsPage.js" />
+	<ui:insert name="head" />
+
+</h:head>
+
+<h:body>
+
+	<div style="width: 150%; height: 70px;"></div>
+
+	<div id="CONTENTSIDE" style="overflow:hidden; width: 700px">
+		<div id="CONTENTSIDEindent">
+			<div class="ContentSideSections">
+				<div class="Content100 overHidden TextShadow">
+					<span class="fontSize30 TextShadow orange regularFont marginBottom20 dispBlock" id="title-template">
+						<span class="orange">NUEVO USUARIO</span>
+					</span>
+				</div>
+			</div>
+			
+			
+			
+			<div class="content-container" style="padding: 40px;" id="contenedor-template">
+				<h:form id="idFormulario">
+				
+				
+			
+					<p:growl showDetail="true" autoUpdate="true" />
+					<h:panelGrid columns="2">
+					
+					
+					<h:outputLabel value="Usuario" />				
+					 <p:commandButton value="Nuevo Usuario"
+	 		            action="#{CRUDUsuario.nuevoUsuario}" 
+	 	             	oncomplete="PF('wRegistrar').show()"
+	 	            	update=":idRegistrar"/>
+	 
+					
+					
+					<h:outputLabel value="Nombre:" />
+				 		<p:inputText 
+				 			value="#{CRUDEmpleados.empleado.nomEmpleado}"
+				 			required="true" requiredMessage="Nombre obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Apellido:" />
+				 		<p:inputText 
+				 			value="#{CRUDEmpleados.empleado.apeEmpleado}"
+				 			required="true" requiredMessage="Apellido obligatorio"/>
+				 			
+				 		<h:outputLabel value="Sexo: " />
+                      <p:selectOneMenu value="#{CRUDEmpleados.empleado.sexoEmpleado}">
+                      <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+                      <f:selectItem itemLabel="Masculino" itemValue="Masculino" />
+                      <f:selectItem itemLabel="Femenino" itemValue="Femenino" />	
+			        </p:selectOneMenu>
+				 			
+				 			
+				 	
+		
+				 		
+				 		
+				 		<h:outputLabel value="Distrito:" />
+				 		<p:selectOneMenu value="#{CRUDEmpleados.empleado.distritoEmpleado.codDistrito}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDEmpleados.listaDistrito}" var="fila"
+				 			itemLabel="#{fila.nomDistrito}"
+				 			itemValue="#{fila.codDistrito}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 		
+				 	
+				 	 
+				 		
+				 		<h:outputLabel  value="Escoge tu Usuario:" />
+				 		<p:selectOneMenu value="#{CRUDEmpleados.empleado.usuarios.codiUsuario}">
+				 			<f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+				 			<f:selectItems value="#{CRUDEmpleados.listaUsuarios}" var="fila"
+				 			itemLabel="#{fila.logUsuario}"
+				 			itemValue="#{fila.codiUsuario}"/>
+				 			
+				 			
+				 		</p:selectOneMenu>
+				 
+	
+							
+					</h:panelGrid>				
+				</h:form>		
+				
+				
+				
+				
+				
+				<!-- dialogo para registrar medicamento -->
+		     <p:dialog header="Registrar Usuario" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Usuario">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Usuario :" />
+				 		<p:inputText 
+				 			value="#{CRUDUsuario.usuario.logUsuario}"
+				 			required="true" requiredMessage="Usuario obligatorio"/>
+				 			
+				 			
+				 		<h:outputLabel value="Password :" />
+				 		<h:inputSecret 
+				 			value="#{CRUDUsuario.usuario.passUsuario}"
+				 			required="true" requiredMessage="Contraseña obligatoria"/>
+				 			
+				 							 		
+				 		<h:outputLabel value="Status:" />
+				 		<p:selectOneMenu value="#{CRUDUsuario.usuario.rolUsuario.codRol}">				 			
+				 			<f:selectItems value="#{CRUDUsuario.listaRoles}" var="fila"
+				 			itemLabel="#{fila.nomRol}"
+				 			itemValue="#{fila.codRol}"/>				 				 			
+				 		</p:selectOneMenu>
+				 		
+				 		
+	 		
+				 
+				 		 <f:facet name="footer">
+				 		 
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDUsuario.registrarUsuario}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":idFormulario"/>
+				 		 	
+				 		 </f:facet>	
+				 		  	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+			</div>
+			
+			
+		
+		
+				 <div class="Content100 overHidden TextShadow">
+					<span class="fontSize15 TextShadow orange regularFont marginBottom10 dispBlock" id="title-template">
+						<span class="orange">------------------------------------------------------------------------------------------------------------------------------</span>				
+					</span>		
+				</div>
+				
+				
+				                <h:link value="REGRESAR" outcome="/ui/login"></h:link>
+				
+				
+			
+				
+
+				 		 	    <p:commandButton value="REGISTRAR"
+				 		 	    style="margin-left:580px;"    
+				 		 		action="#{CRUDEmpleados.registrarEmpleado}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"				 		 		 
+				 		 		/>
+			
+     
+     
+     </div>
+		
+
+	<div style="clear: both;">&nbsp;</div>
+	</div>
+
+</h:body>
+
+</html>

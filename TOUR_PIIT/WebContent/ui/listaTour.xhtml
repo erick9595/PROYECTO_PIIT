@@ -1,0 +1,282 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<ui:composition template="../templates/uiConMenu.xhtml">
+	<ui:define name="content">
+	 <h:form id="frmLista">
+	 	<p:commandButton value="Nuevo Tour"
+	 		action="#{CRUDTour.nuevoTour}" 
+	 		oncomplete="PF('wRegistrar').show()"
+	 		update=":idRegistrar"/>
+	 
+	        
+	 
+	 
+	 
+		<p:dataTable value="#{CRUDTour.listaTour}" 
+			var="row" id="idLista"
+			rowKey="#{row.codTour}" selectionMode="single" 
+			rows="10"
+            paginator="true"
+            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} 
+                            					{NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+			binding="#{CRUDTour.dtFila}">
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			<p:column headerText="ID" style="width:20px">
+				<h:outputLabel value="#{row.codTour}" />			
+			</p:column>
+			
+			<p:column headerText="Tour" style="width:80px">
+				<h:outputLabel value="#{row.nomTour}"/>			
+			</p:column>
+			
+			<p:column headerText="Destino" style="width:70px">
+				<h:outputLabel value="#{row.destino.departamentoDestino.nomDepartamento}"/>			
+			</p:column>
+			
+			
+			
+			<p:column headerText="Transporte" style="width:110px">
+				<h:outputLabel value="#{row.destino.nomBus}"/>			
+			</p:column>
+			
+			
+			<p:column headerText="Hotel" style="width:130px">
+				<h:outputLabel value="#{row.destino.nomHotel}"/>			
+			</p:column>
+	
+	
+			
+			<p:column headerText="Perso." style="width:40px" >
+				<h:outputLabel value="#{row.stockTour}"/>			
+			</p:column>
+			
+			
+			<p:column headerText="Precio" style="width:50px">
+				<h:outputLabel value="#{row.precioTour}">	
+				<f:convertNumber currencySymbol="S/." locale="en_US" minFractionDigits="2"
+				type="currency"/>
+				</h:outputLabel>		
+			</p:column>
+			
+			<p:column headerText="Partida"  style="width:80px">
+				<h:outputLabel value="#{row.fechaViaje}">
+				<f:convertDateTime pattern="dd/MM/yyyy" type="date"/>			
+			</h:outputLabel>
+			
+		
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-edit"  
+					action="#{CRUDTour.seleccionar}"
+					oncomplete="PF('wActualizar').show()"
+					update=":idActualizar"/>
+			</p:column>
+			<p:column headerText="">
+				<p:commandButton icon="fa fa-fw fa-remove" 
+					action="#{CRUDTour.seleccionar}"
+					onclick="PF('cd').show()"/>
+			</p:column>
+			
+		   </p:dataTable>
+		   <p:confirmDialog message="Seguro de eliminar?" 
+		   		widgetVar="cd">
+		   			<p:commandButton value="Si" 
+		   				action="#{CRUDTour.eliminarTour}"
+		   				oncomplete="PF('cd').hide()"
+		   				update="idLista"/>
+		   			<p:commandButton value="No" 
+		   				onclick="PF('cd').hide()"/>
+		   </p:confirmDialog>
+		</h:form>
+		
+		
+		
+		<!-- dialogo para registrar medicamento -->
+		<p:dialog header="Registrar Tour" modal="true" 
+				widgetVar="wRegistrar" id="idRegistrar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Registrar Tour">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Tour:" />
+				 		<p:inputText 
+				 			value="#{CRUDTour.tour.nomTour}"
+				 			required="true" requiredMessage="Nombre de Tour obligatorio"/>
+				 		
+				
+				 		<h:outputLabel value="Destino:  " />
+	                        <p:selectOneMenu value="#{CRUDTour.tour.destino.codDestino}">
+                              <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+	                          <f:selectItems value="#{CRUDTour.listaDepartamento}" var="fila"
+		                             itemLabel="#{fila.nomDepartamento}"
+		                             itemValue="#{fila.codDepartamento}"/>
+                            </p:selectOneMenu>
+				 		
+				 		
+				 		
+				 			
+				 	
+			
+				 		<h:outputLabel value="Precio:" />
+				 		<p:inputText value="#{CRUDTour.tour.precioTour}"/>
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Persona(s):" />
+				 		<p:inputText value="#{CRUDTour.tour.stockTour}"/>
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Fecha:" />
+				 		<p:calendar  showOn="button" pattern="yyyy-MM-dd" locale="es"
+				 		 value="#{CRUDTour.tour.fechaViaje}"/>
+				 		 
+				 		 
+				 		 
+				 		 
+				 		<h:outputLabel value="Foto:" />
+				 		<p:fileUpload   label="Seleccionar"  
+				 								 cancelLabel="Cancelar"
+				 								 uploadLabel="Subir"
+				 				fileUploadListener="#{CRUDTour.subirFoto}"/>
+				 				
+				 				
+				 				
+				 				
+				 			
+				 	
+				 				
+				 				
+				 				
+				 				
+				 				
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Grabar"  
+				 		 		action="#{CRUDTour.registrarTour}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wRegistrar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+		
+		
+		
+		
+		<!-- dialogo para actualizar medicamento -->
+		<p:dialog header="Actualizar Tour" modal="true" 
+				widgetVar="wActualizar" id="idActualizar">
+				 <h:form>
+				 	<p:growl  autoUpdate="true" showDetail="true"/>
+				 	<p:fieldset legend="Actualizar Tour">
+				 		<p:panelGrid columns="2">
+				 		
+				 		
+				 		
+				 		 		<h:outputLabel value="Tour:" />
+				 		<p:inputText 
+				 			value="#{CRUDTour.tour.nomTour}"
+				 			required="true" requiredMessage="Nombre de Tour obligatorio"/>
+				 		
+				
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Destino:  " />
+	                        <p:selectOneMenu value="#{CRUDTour.tour.destino.codDestino}">
+                              <f:selectItem itemLabel="[Seleccione]" itemValue=" " />
+	                          <f:selectItems value="#{CRUDTour.listaDepartamento}" var="fila"
+		                             itemLabel="#{fila.nomDepartamento}"
+		                             itemValue="#{fila.codDepartamento}"/>
+                            </p:selectOneMenu>
+				 		
+				 			
+				
+				 		
+				 			
+			
+				 		<h:outputLabel value="Precio:" />
+				 		<p:inputText value="#{CRUDTour.tour.precioTour}"/>
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Persona(s):" />
+				 		<p:inputText value="#{CRUDTour.tour.stockTour}"/>
+				 		
+				 		
+				 		
+				 		
+				 		<h:outputLabel value="Fecha:" />
+				 		<p:calendar  showOn="button" pattern="yyyy-MM-dd" locale="es"
+				 		 value="#{CRUDTour.tour.fechaViaje}"/>
+				 		 
+				 		 
+				 		 
+				 		<h:outputLabel value="Foto:" />
+				 		<p:fileUpload   label="Seleccionar"  
+				 								 cancelLabel="Cancelar"
+				 								 uploadLabel="Subir"
+				 				fileUploadListener="#{CRUDTour.subirFoto}"/>
+				 				
+				 				
+				 				
+				 				
+				 			
+				 			
+				 				
+				
+				 				
+				 		
+				 		
+				 		 <f:facet name="footer">
+				 		 	<p:commandButton value="Actualizar"  
+				 		 		action="#{CRUDTour.actualizarTour}"
+				 		 		oncomplete="if (!args.validationFailed)  PF('wActualizar').hide()"
+				 		 		update=":frmLista:idLista"/>
+				 		 </f:facet>	 	
+				 		</p:panelGrid>
+				 	</p:fieldset>
+				 </h:form>		
+		</p:dialog>
+		
+		
+	</ui:define>
+</ui:composition>
+</html>
+
+
+
